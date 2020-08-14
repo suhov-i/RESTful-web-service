@@ -7,6 +7,7 @@ import com.isukhov.webservices.mobileappws.shared.Utils;
 import com.isukhov.webservices.mobileappws.shared.dto.UserDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,6 +15,9 @@ public class UserServiceImpl implements UserService {
 
     UserRepository userRepository;
     Utils utils;
+
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     public void setUtils(Utils utils) {
@@ -30,7 +34,7 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         BeanUtils.copyProperties(userDto, user);
 
-        user.setEncryptedPassword("test");
+        user.setEncryptedPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
         user.setUserId(utils.generateUserId(30));
 
         User storedUser = userRepository.save(user);
