@@ -1,13 +1,11 @@
 package com.isukhov.webservices.mobileappws.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
-@Entity(name = "users")
-public class User implements Serializable {
+@Entity
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
+public class UserEntity implements Serializable {
     private static final long serialVersionUID = 8045884888348262870L;
 
     @Id
@@ -17,13 +15,13 @@ public class User implements Serializable {
     @Column(nullable = false)
     private String userId;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 20)
     private String firstName;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 20)
     private String lastName;
 
-    @Column(nullable = false, length = 120, unique = true)
+    @Column(nullable = false, length = 50)
     private String email;
 
     @Column(nullable = false)
