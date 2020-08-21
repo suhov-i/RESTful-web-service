@@ -4,8 +4,7 @@ import com.isukhov.webservices.mobileappws.exceptions.UserServiceException;
 import com.isukhov.webservices.mobileappws.service.UserService;
 import com.isukhov.webservices.mobileappws.shared.dto.UserDto;
 import com.isukhov.webservices.mobileappws.ui.model.request.UserDetails;
-import com.isukhov.webservices.mobileappws.ui.model.response.ErrorMessages;
-import com.isukhov.webservices.mobileappws.ui.model.response.UserRest;
+import com.isukhov.webservices.mobileappws.ui.model.response.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -65,8 +64,15 @@ public class UserController {
         return result;
     }
 
-    @DeleteMapping
-    public String deleteUser() {
-        return "delete";
+    @DeleteMapping(path = "/{userId}")
+    public OperationStatus deleteUser(@PathVariable String userId) {
+        OperationStatus operationStatus = new OperationStatus();
+        operationStatus.setOperationName(RequestOperationName.DELETE.name());
+
+        userService.deleteUser(userId);
+
+        operationStatus.setOperationResult(RequestOperationStatus.SUCCESS.name());
+
+        return operationStatus;
     }
 }
