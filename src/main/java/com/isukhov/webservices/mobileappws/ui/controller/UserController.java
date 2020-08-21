@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @RestController
 @RequestMapping("users")
@@ -74,5 +76,23 @@ public class UserController {
         operationStatus.setOperationResult(RequestOperationStatus.SUCCESS.name());
 
         return operationStatus;
+    }
+
+    @GetMapping
+    public List<UserRest> getUsers(
+            @RequestParam (value = "page", defaultValue = "0") int page,
+            @RequestParam (value = "limit", defaultValue = "25") int limit
+    ) {
+        List<UserRest> userList = new ArrayList<>();
+
+        List<UserDto> userDtos = userService.getUsers(page, limit);
+
+        for (UserDto userDto : userDtos) {
+            UserRest userRest = new UserRest();
+            BeanUtils.copyProperties(userDto, userRest);
+            userList.add(userRest);
+        }
+
+        return userList;
     }
 }
